@@ -36,14 +36,16 @@ if not os.path.exists(models_dir):
     os.makedirs(models_dir)
     sys.exit()
 
-model_dirs = [d for d in os.listdir(models_dir) if os.path.isdir(os.path.join(models_dir, d))]
-
-if not model_dirs:
-    sys.exit()
-
 loaded_models = []
-for m_dir in model_dirs:
-    loaded_models.append(Model(os.path.join(models_dir, m_dir)))
+for root, dirs, files in os.walk(models_dir):
+    if "am" in dirs and "conf" in dirs:
+        try:
+            loaded_models.append(Model(root))
+        except Exception:
+            pass
+
+if not loaded_models:
+    sys.exit()
 
 q = queue.Queue()
 
@@ -69,8 +71,8 @@ def toggle_listening():
 def key_monitor():
     global current_model_idx, current_model, language_changed
     right_alt_pressed_state = False
-    press_start_time = 0
     last_release_time = 0
+    press_start_time = 0
 
     while True:
         is_pressed = is_right_alt_pressed()
