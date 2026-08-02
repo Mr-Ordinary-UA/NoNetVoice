@@ -233,3 +233,5 @@ ENV/
 #language model
 model/*
 !model/.gitkeep
+models/*
+!models/.gitkeep
