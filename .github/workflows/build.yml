@@ -1,11 +1,12 @@
-name: Build Executables
+name: Build and Release
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
+permissions:
+  contents: write
+  
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -16,11 +17,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install PortAudio (Ubuntu)
+    - name: Install PortAudio Linux
       if: matrix.os == 'ubuntu-latest'
       run: sudo apt-get update && sudo apt-get install -y portaudio19-dev python3-dev
 
-    - name: Install PortAudio (macOS)
+    - name: Install PortAudio macOS
       if: matrix.os == 'macos-latest'
       run: brew install portaudio
 
@@ -35,11 +36,38 @@ jobs:
         pip install pyinstaller
         pip install -r requirements.txt
 
-    - name: Build Executable
-      run: pyinstaller --onefile dictation.py
+    - name: Build Executable Windows
+      if: matrix.os == 'windows-latest'
+      run: pyinstaller --onefile --name NoNetVoice-Windows dictation.py
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+    - name: Build Executable Linux
+      if: matrix.os == 'ubuntu-latest'
+      run: pyinstaller --onefile --name NoNetVoice-Linux dictation.py
+
+    - name: Build Executable macOS
+      if: matrix.os == 'macos-latest'
+      run: pyinstaller --onefile --name NoNetVoice-macOS dictation.py
+
+    - name: Publish Release Windows
+      if: matrix.os == 'windows-latest'
+      uses: softprops/action-gh-release@v2
       with:
-        name: NoNetVoice-${{ matrix.os }}
-        path: dist/
+        tag_name: Latest
+        name: Latest Build
+        files: dist/NoNetVoice-Windows.exe
+
+    - name: Publish Release Linux
+      if: matrix.os == 'ubuntu-latest'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: Latest
+        name: Latest Build
+        files: dist/NoNetVoice-Linux
+
+    - name: Publish Release macOS
+      if: matrix.os == 'macos-latest'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: Latest
+        name: Latest Build
+        files: dist/NoNetVoice-macOS
