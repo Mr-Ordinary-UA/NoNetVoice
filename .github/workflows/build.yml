@@ -19,7 +19,7 @@ jobs:
 
     - name: Install PortAudio Linux
       if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get update && sudo apt-get install -y portaudio19-dev python3-dev
+      run: sudo apt-get update && sudo apt-get install -y portaudio19-dev python3-dev python3-tk
 
     - name: Install PortAudio macOS
       if: matrix.os == 'macos-latest'
