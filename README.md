@@ -4,11 +4,11 @@ This tool converts voice to text without an internet connection.
 
 ## Downloading Models
 
-Download the language models from the official Vosk website. You need to visit https://alphacephei.com/vosk/models. Choose the models for your preferred languages.
+Download the language models from the official Vosk website at https://alphacephei.com/vosk/models.
 
 ## File Structure
 
-Make a folder named `models` next to the downloaded executable file. Extract the language archives into this folder. Each language needs its own subfolder. Place the `punctuation.json` file in the same directory as the executable.
+Place the `models` folder next to the downloaded executable file. Extract the downloaded language archives into this folder. Rename the extracted language folders to match your desired language codes. Place the `punctuation.json` file in the same directory as the executable.
 
 Correct file placement:
 
@@ -32,7 +32,7 @@ Download the compiled application from the Releases page in this repository. Run
 
 ## Instructions
 
-Press and release the right Alt button to start or stop recording. A short beep confirms the state change. Hold the right Alt button for one second to display the language selection menu. The graphical interface allows you to select the active language from a dropdown list. The menu contains a checkbox to toggle visual status notifications. The menu contains a checkbox to disable the graphical popup. If you disable the menu, holding the right Alt button cycles through installed languages with a double beep.
+Double-press the right Alt button to start or stop recording. A short beep confirms the state change. Hold the right Alt button for one second to display the language selection menu. The graphical interface allows you to select the active language from a dropdown list. The menu contains a checkbox to toggle visual status notifications. The menu contains a checkbox to disable the graphical popup. If you disable the menu, holding the right Alt button cycles through installed languages with a double beep.
 
 ## Punctuation and Macros
 
@@ -49,13 +49,19 @@ Example format for `punctuation.json`:
   "model_uk": {
     "кома": ",",
     "крапка": ".",
+    "знак питання": "?",
+    "знак оклику": "!",
+    "новий рядок": "<SHIFT_ENTER>",
     "абзац": "<SHIFT_ENTER> <SHIFT_ENTER>",
     "відправити": "<ENTER>"
   },
   "model_en": {
     "comma": ",",
     "period": ".",
+    "question mark": "?",
+    "exclamation mark": "!",
     "new line": "<SHIFT_ENTER>",
+    "new paragraph": "<SHIFT_ENTER> <SHIFT_ENTER>",
     "send message": "<ENTER>"
   }
 }
@@ -63,4 +69,4 @@ Example format for `punctuation.json`:
 
 ## Automatic Startup
 
-You can configure the application to launch automatically when your system boots. Configure your operating system task scheduling tools to run the executable file at startup. For Windows, configure the Task Scheduler. For Linux, configure cron. For macOS, configure Automator or launchd.
+Configure your operating system task scheduling tools to run the executable file at startup. For Windows, configure the Task Scheduler. For Linux, configure cron. For macOS, configure Automator or launchd.
