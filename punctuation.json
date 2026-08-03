@@ -1,0 +1,20 @@
+{
+  "model_uk": {
+    "кома": ",",
+    "крапка": ".",
+    "знак питання": "?",
+    "знак оклику": "!",
+    "новий рядок": "<SHIFT_ENTER>",
+    "абзац": "<SHIFT_ENTER> <SHIFT_ENTER>",
+    "відправити": "<ENTER>"
+  },
+  "model_en": {
+    "comma": ",",
+    "period": ".",
+    "question mark": "?",
+    "exclamation mark": "!",
+    "new line": "<SHIFT_ENTER>",
+    "new paragraph": "<SHIFT_ENTER> <SHIFT_ENTER>",
+    "send message": "<ENTER>"
+  }
+}

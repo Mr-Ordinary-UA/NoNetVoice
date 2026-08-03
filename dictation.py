@@ -10,6 +10,7 @@ from tkinter import ttk
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
 import keyboard
+import re
 
 os_name = platform.system()
 
@@ -61,6 +62,47 @@ q = queue.Queue()
 popup_is_open = False
 show_popup = True
 visual_feedback = False
+
+punct_file = os.path.join(current_dir, "punctuation.json")
+punct_dict = {}
+
+if os.path.exists(punct_file):
+    with open(punct_file, "r", encoding="utf-8") as file:
+        punct_dict = json.load(file)
+
+capitalize_next = True
+
+def format_text(text):
+    global capitalize_next
+    
+    if not punct_dict or current_model_name not in punct_dict:
+        return text + " "
+
+    current_lang_dict = punct_dict[current_model_name]
+
+    for word, symbol in current_lang_dict.items():
+        word = word.strip()
+        text = text.replace(" " + word, symbol)
+        text = text.replace(word, symbol)
+        
+    words = text.split()
+    
+    out = ""
+    for item in words:
+        if item in ("<SHIFT_ENTER>", "<ENTER>"):
+            out = out.rstrip() + item
+            capitalize_next = True
+        else:
+            if capitalize_next:
+                item = item.capitalize()
+                capitalize_next = False
+                
+            if item.endswith(".") or item.endswith("?") or item.endswith("!"):
+                capitalize_next = True
+                
+            out += item + " "
+            
+    return out
 
 class ToolTip:
     def __init__(self, widget, text):
@@ -218,7 +260,15 @@ def audio_processing():
                     result = json.loads(rec.Result())
                     text = result.get("text", "")
                     if text:
-                        keyboard.write(text + " ")
+                        formatted = format_text(text)
+                        parts = re.split(r'(<SHIFT_ENTER>|<ENTER>)', formatted)
+                        for part in parts:
+                            if part == '<SHIFT_ENTER>':
+                                keyboard.send('shift+enter')
+                            elif part == '<ENTER>':
+                                keyboard.send('enter')
+                            elif part:
+                                keyboard.write(part)
             except queue.Empty:
                 pass
 
